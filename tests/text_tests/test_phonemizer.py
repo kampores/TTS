@@ -116,6 +116,18 @@ class TestGruutPhonemizer(unittest.TestCase):
             "f|ɔ|ː|ɹ| ɪ|m|o|ʊ|ʃ|ə|n|ə|l| ɹ|ɛ|ɡ|j|ʊ|l|e|ɪ|ʃ|ə|n| æ|n|d| l|ɜ|ː|n|ɪ|ŋ!",
         ]
 
+    def test_phonemize_kr(self):
+        EXAMPLE_TEXTs = [
+            "안녕하세요, 반갑습니다."
+        ]
+        self.phonemizer = Gruut(language="ko", use_espeak_phonemes=True, keep_stress=False)
+        self.EXPECTED_PHONEMES = [
+            "ɐnnjʌŋ hɐ sejo, pɐnqɐp sɯpnidɐ."
+        ]
+        for text, ph in zip(EXAMPLE_TEXTs, self.EXPECTED_PHONEMES):
+            phonemes = self.phonemizer.phonemize(text, separator="")
+            self.assertEqual(phonemes, ph)
+
     def test_phonemize(self):
         for text, ph in zip(EXAMPLE_TEXTs, self.EXPECTED_PHONEMES):
             phonemes = self.phonemizer.phonemize(text, separator="|")
