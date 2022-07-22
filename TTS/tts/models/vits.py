@@ -289,7 +289,12 @@ class VitsDataset(TTSDataset):
             token_ids = batch["token_ids"][i]
             token_padded[i, : batch["token_len"][i]] = torch.LongTensor(token_ids)
 
-            wav = batch["wav"][i]
+            #If wav is stereo, only the left channel is collected.
+            if batch["wav"][i].shape[0] != 1:
+                wav = batch["wav"][i][0]
+                wav = torch.reshape(wav, (1, wav.size(0)))
+            else:
+                wav = batch["wav"][i]
             wav_padded[i, :, : wav.size(1)] = torch.FloatTensor(wav)
 
         return {
